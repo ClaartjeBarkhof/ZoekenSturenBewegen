@@ -168,7 +168,87 @@ class ChessBoard:
     # [c2c3, d4e5, f4f8]
     # TODO: write an implementation for this function
     def legal_moves(self):
-        pass
+        lower_bound = 0
+        upper_bound = 8
+        turn = self.turn
+        total_moves = []
+        for y in range(lower_bound,upper_bound):
+            for x in range(lower_bound,upper_bound):
+                location = (x,y)
+                piece = self.get_boardpiece(location)
+                print(location, piece)
+                if piece == None:
+                    continue
+                else:
+                    if piece.side == turn:
+                        material = piece.material
+                        print(material)
+                        moves = []
+                        if material == Material.Pawn:
+                            moves = self.pawn_move(turn, location)
+                            if moves != []:
+                                total_moves.append(moves)
+                        if material == Material.Rook:
+                            moves = self.rook_move(turn, location)
+                            if moves != []:
+                                total_moves.append(moves)
+                        else:
+                            moves = self.king_move(turn, location)
+                            if moves != []:
+                                total_moves.extend(moves)
+                        print(total_moves)
+        total_moves = self.translate_coordinates(total_moves)
+        print(total_moves)
+        return total_moves
+
+    def pawn_move(self, turn, location_1):
+        move = []
+        x = location_1[0]
+        y = location_1[1]
+        if turn == Side.White:
+            if y != 0:
+                y1 = y - 1
+                location_2 = (x,y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = [location_1, location_2]
+                else:
+                    print("occupied")
+        else:
+            if y != 7:
+                y1 = y + 1
+                location_2 = (x,y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = [location_1, location_2]
+                else:
+                    print('occupied')
+        if move == []:
+            print("no moves possible!")
+        return move
+
+    def check_occupied_by_self(self, location):
+        turn = self.turn
+        piece = self.get_boardpiece(location)
+        if piece != None:
+            if piece.side == turn:
+                return 1
+        return 0
+
+    def rook_move(self, turn, location):
+        moves = []
+        return moves
+
+    def king_move(self, turn, location):
+        moves = []
+        return moves
+
+    def translate_coordinates(self, total_moves):
+        total_moves_notation = []
+        for move in total_moves:
+            notation_move = ""
+            for coordinate in move:
+                notation_move += to_notation(coordinate)
+            total_moves_notation.append(notation_move)
+        return total_moves_notation
 
     # This function should return, given the move specified (in the format
     # 'd2d3') whether this move is legal
@@ -238,7 +318,7 @@ class ChessGame:
         if len(sys.argv) > 1:
             filename = sys.argv[1]
         else:
-            filename = "board.chb"
+            filename = "board_test.chb"
 
         print("Reading from " + filename + "...")
         self.load_from_file(filename)
@@ -252,6 +332,8 @@ class ChessGame:
     def main(self):
         while True:
             print(self.chessboard)
+
+            self.chessboard.legal_moves()
 
             # Print the current score
             score = ChessComputer.evaluate_board(self.chessboard,self.depth)
@@ -298,6 +380,6 @@ class ChessGame:
             print("Black wins!")
             sys.exit(0)
 
-chess_game = ChessGame(Side.White)
+chess_game = ChessGame(Side.Black)
 chess_game.main()
 
