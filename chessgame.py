@@ -176,27 +176,24 @@ class ChessBoard:
             for x in range(lower_bound,upper_bound):
                 location = (x,y)
                 piece = self.get_boardpiece(location)
-                print(location, piece)
                 if piece == None:
                     continue
                 else:
                     if piece.side == turn:
                         material = piece.material
-                        print(material)
                         moves = []
                         if material == Material.Pawn:
-                            moves = self.pawn_move(turn, location)
-                            if moves != []:
-                                total_moves.append(moves)
+                            move = self.pawn_move(turn, location)
+                            if move != []:
+                                total_moves.append(move)
                         if material == Material.Rook:
                             moves = self.rook_move(turn, location)
                             if moves != []:
-                                total_moves.append(moves)
+                                total_moves.extend(moves)
                         else:
                             moves = self.king_move(turn, location)
                             if moves != []:
                                 total_moves.extend(moves)
-                        print(total_moves)
         total_moves = self.translate_coordinates(total_moves)
         print(total_moves)
         return total_moves
@@ -233,8 +230,52 @@ class ChessBoard:
                 return 1
         return 0
 
-    def rook_move(self, turn, location):
+    def check_occupied_by_other(self, location):
+        turn = self.turn
+        piece = self.get_boardpiece(location)
+        if piece != None:
+            if piece.side != turn:
+                return 1
+        return 0
+
+    def rook_move(self, turn, location_1):
+        location_2 = list(location_1)
         moves = []
+        while location_2[0] != 7:
+            location_2[0] += 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        location_2 = list(location_1)
+        while location_2[0] != 0:
+            location_2[0] -= 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        location_2 = list(location_1)
+        while location_2[1] != 7:
+            location_2[1] += 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        location_2 = list(location_1)
+        while location_2[1] != 0:
+            location_2[1] -= 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
         return moves
 
     def king_move(self, turn, location):
@@ -380,6 +421,6 @@ class ChessGame:
             print("Black wins!")
             sys.exit(0)
 
-chess_game = ChessGame(Side.Black)
+chess_game = ChessGame(Side.White)
 chess_game.main()
 
