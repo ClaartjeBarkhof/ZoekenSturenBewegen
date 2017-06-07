@@ -237,8 +237,58 @@ class ChessBoard:
         moves = []
         return moves
 
-    def king_move(self, turn, location):
+    def king_move(self, turn, location_1):
         moves = []
+        x = location_1[0]
+        y = location_1[1]
+        if y != 0:
+            lower_y = y - 1
+            location_2 = (x, lower_y)
+            if self.check_occupied_by_self(location_2) == 0:
+                move = [location_1, location_2]
+                moves.append(move)
+            if x != 0:
+                lower_x = x - 1
+                location_2 = (lower_x, lower_y)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = [location_1, location_2]
+                    moves.append(move)
+            if x != 7:
+                upper_x = x + 1
+                location_2 = (upper_x, lower_y)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = [location_1, location_2]
+                    moves.append(move)
+        if x != 0:
+            lower_x = x - 1
+            location_2 = (lower_x, y)
+            if self.check_occupied_by_self(location_2) == 0:
+                move = [location_1, location_2]
+                moves.append(move)
+            if y != 7:
+                upper_y = y + 1
+                location_2 = (lower_x, upper_y)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = [location_1, location_2]
+                    moves.append(move)
+        if x != 7:
+            upper_x = x + 1
+            location_2 = (upper_x, y)
+            if self.check_occupied_by_self(location_2) == 0:
+                move = [location_1, location_2]
+                moves.append(move)
+            if y != 7:
+                upper_y = y + 1
+                location_2 = (upper_x, upper_y)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = [location_1, location_2]
+                    moves.append(move)
+        if y != 7:
+            upper_y = y + 1
+            location_2 = (x, upper_y)
+            if self.check_occupied_by_self(location_2) == 0:
+                move = [location_1, location_2]
+                moves.append(move)
         return moves
 
     def translate_coordinates(self, total_moves):
