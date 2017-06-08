@@ -376,6 +376,7 @@ class ChessBoard:
         score = 0
         lower_bound = 0
         upper_bound = 8
+        turn = chessboard.turn
         for y in range(lower_bound, upper_bound):
             for x in range(lower_bound, upper_bound):
                 location = (x, y)
@@ -386,17 +387,17 @@ class ChessBoard:
                     material = piece.material
                     side = piece.side
                     if material == Material.Pawn:
-                        if side == Side.White:
+                        if side == turn:
                             score += 16
                         else:
                             score -= 16
                     if material == Material.Rook:
-                        if side == Side.White:
+                        if side == turn:
                             score += 64
                         else:
                             score -= 64
                     else:
-                        if side == Side.White:
+                        if side == turn:
                             score += 1600
                         else:
                             score -= 1600
@@ -438,6 +439,7 @@ class ChessComputer:
             new_board = chessboard.make_move(move)
             print(new_board)
             value = ChessComputer.min_value(new_board, depth-1)
+            print("Value of this board is", value)
             if best_value < value or best_value == -50000:
                 best_move = move
                 best_value = value
@@ -446,24 +448,26 @@ class ChessComputer:
     @staticmethod
     def max_value(chessboard, depth):
         if depth == 0:
-            return (chessboard, ChessComputer.evaluate_board(chessboard, depth))
+            return (ChessComputer.evaluate_board(chessboard, depth))
         if chessboard.is_king_dead(chessboard.turn):
-            return(chessboard, ChessComputer.evaluate_board(chessboard, depth))
+            return(ChessComputer.evaluate_board(chessboard, depth))
 
         for move in chessboard.legal_moves():
             new_board = chessboard.make_move(move)
             value = ChessComputer.min_value(new_board, depth-1)
+            return value
 
     @staticmethod
     def min_value(chessboard, depth):
         if depth == 0:
-            return (chessboard, ChessComputer.evaluate_board(chessboard, depth))
+            return (ChessComputer.evaluate_board(chessboard, depth))
         if chessboard.is_king_dead(chessboard.turn):
-            return(chessboard, ChessComputer.evaluate_board(chessboard, depth))
+            return(ChessComputer.evaluate_board(chessboard, depth))
 
         for move in chessboard.legal_moves():
             new_board = chessboard.make_move(move)
             value = ChessComputer.max_value(new_board, depth-1)
+            return value
 
     # This function uses alphabeta to calculate the next move. Given the
     # chessboard and max depth, this function should return a tuple of the
@@ -520,11 +524,13 @@ class ChessGame:
             print("Current score: " + str(score))
             
             # Calculate the best possible move
-            #new_score, best_move = self.make_computer_move()
+            new_score, best_move = self.make_computer_move()
             
-            #print("Best move: " + best_move)
-            #print("Score to achieve: " + str(new_score))
+            print("Best move: " + best_move)
+            print("Score to achieve: " + str(new_score))
             print("")
+            print("new board is:")
+            print(self.chessboard.make_move(best_move))
             self.make_human_move()
 
 
