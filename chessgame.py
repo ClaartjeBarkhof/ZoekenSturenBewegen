@@ -384,15 +384,16 @@ class ChessComputer:
     # depth of the search algorithm. It returns a tuple of (score, chessboard)
     # with score the maximum score attainable and chessboardmove that is needed
     #to achieve this score.
+    '''
+    if alphabeta:
+        inf = 99999999
+        min_inf = -inf
+        return ChessComputer.alphabeta(chessboard, depth, min_inf, inf)
+    else:
+    '''
     @staticmethod
     def computer_move(chessboard, depth, alphabeta=False):
-        if alphabeta:
-            inf = 99999999
-            min_inf = -inf
-            return ChessComputer.alphabeta(chessboard, depth, min_inf, inf)
-        else:
-            return ChessComputer.minimax(chessboard, depth)
-
+        return ChessComputer.minimax(chessboard, depth)
 
     # This function uses minimax to calculate the next move. Given the current
     # chessboard and max depth, this function should return a tuple of the
@@ -402,7 +403,40 @@ class ChessComputer:
     # TODO: write an implementation for this function
     @staticmethod
     def minimax(chessboard, depth):
-        return (0, "no implementation written")
+        best_value = -50000
+        best_move = None
+
+        for move in chessboard.legal_moves():
+            print(move)
+            new_board = chessboard.make_move(move)
+            print(new_board)
+            value = ChessComputer.min_value(new_board, depth-1)
+            if best_value < value or best_value == -50000:
+                best_move = move
+                best_value = value
+        return (best_value, best_move)
+
+    @staticmethod
+    def max_value(chessboard, depth):
+        if depth == 0:
+            return (chessboard, ChessComputer.evaluate_board(chessboard, depth))
+        if chessboard.is_king_dead(chessboard.turn):
+            return(chessboard, ChessComputer.evaluate_board(chessboard, depth))
+
+        for move in chessboard.legal_moves():
+            new_board = chessboard.make_move(move)
+            value = ChessComputer.min_value(new_board, depth-1)
+
+    @staticmethod
+    def min_value(chessboard, depth):
+        if depth == 0:
+            return (chessboard, ChessComputer.evaluate_board(chessboard, depth))
+        if chessboard.is_king_dead(chessboard.turn):
+            return(chessboard, ChessComputer.evaluate_board(chessboard, depth))
+
+        for move in chessboard.legal_moves():
+            new_board = chessboard.make_move(move)
+            value = ChessComputer.max_value(new_board, depth-1)
 
     # This function uses alphabeta to calculate the next move. Given the
     # chessboard and max depth, this function should return a tuple of the
@@ -422,7 +456,7 @@ class ChessComputer:
         total_score = 0
         total_score += ChessBoard.score_total_pieces(chessboard)
         if depth_left > 1:
-            total_score = total_score/((depth_left-1)*2)
+            total_score = total_score+(depth_left*10)
         return total_score
 
 # This class is responsible for starting the chess game, playing and user 
@@ -454,6 +488,8 @@ class ChessGame:
         while True:
             print(self.chessboard)
 
+            print(self.chessboard.legal_moves())
+
             # Print the current score
             score = ChessComputer.evaluate_board(self.chessboard,self.depth)
             print("Current score: " + str(score))
@@ -471,7 +507,6 @@ class ChessGame:
         print("Calculating best move...")
         return ChessComputer.computer_move(self.chessboard,
                 self.depth, alphabeta=True)
-        
 
     def make_human_move(self):
         # Endlessly request input until the right input is specified
