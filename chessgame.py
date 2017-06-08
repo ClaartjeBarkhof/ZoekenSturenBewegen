@@ -388,19 +388,19 @@ class ChessBoard:
                     side = piece.side
                     if material == Material.Pawn:
                         if side == turn:
-                            score += 16
+                            score += 1
                         else:
-                            score -= 16
+                            score -= 1
                     if material == Material.Rook:
                         if side == turn:
-                            score += 64
+                            score += 5
                         else:
-                            score -= 64
+                            score -= 5
                     else:
                         if side == turn:
-                            score += 1600
+                            score += 100
                         else:
-                            score -= 1600
+                            score -= 100
         return score
 
 # This static class is responsible for providing functions that can calculate
@@ -433,40 +433,47 @@ class ChessComputer:
     def minimax(chessboard, depth):
         best_value = -50000
         best_move = None
-
+        original_turn = chessboard.turn
         for move in chessboard.legal_moves():
             print(move)
             new_board = chessboard.make_move(move)
             print(new_board)
-            value = ChessComputer.min_value(new_board, depth-1)
-            print("Value of this board is", value)
-            if best_value < value or best_value == -50000:
-                best_move = move
-                best_value = value
+            if original_turn == Side.White:
+                value = ChessComputer.min_value(new_board, depth-1, original_turn)
+                print("Value of this board is", value)
+                if best_value < value or best_value == -50000:
+                    best_move = move
+                    best_value = value
+            else:
+                value = ChessComputer.max_value(new_board, depth-1, original_turn)
+                print("Value of this board is", value)
+                if best_value > value or best_value == -50000:
+                    best_move = move
+                    best_value = value
         return (best_value, best_move)
 
     @staticmethod
-    def max_value(chessboard, depth):
+    def max_value(chessboard, depth, original_turn):
         if depth == 0:
-            return (ChessComputer.evaluate_board(chessboard, depth))
+            return (ChessComputer.evaluate_board(chessboard, depth, original_turn))
         if chessboard.is_king_dead(chessboard.turn):
-            return(ChessComputer.evaluate_board(chessboard, depth))
+            return(ChessComputer.evaluate_board(chessboard, depth, original_turn))
 
         for move in chessboard.legal_moves():
             new_board = chessboard.make_move(move)
-            value = ChessComputer.min_value(new_board, depth-1)
+            value = ChessComputer.min_value(new_board, depth-1, original_turn)
             return value
 
     @staticmethod
-    def min_value(chessboard, depth):
+    def min_value(chessboard, depth, original_turn):
         if depth == 0:
-            return (ChessComputer.evaluate_board(chessboard, depth))
+            return (ChessComputer.evaluate_board(chessboard, depth, original_turn))
         if chessboard.is_king_dead(chessboard.turn):
-            return(ChessComputer.evaluate_board(chessboard, depth))
+            return(ChessComputer.evaluate_board(chessboard, depth, original_turn))
 
         for move in chessboard.legal_moves():
             new_board = chessboard.make_move(move)
-            value = ChessComputer.max_value(new_board, depth-1)
+            value = ChessComputer.max_value(new_board, depth-1, original_turn)
             return value
 
     # This function uses alphabeta to calculate the next move. Given the
@@ -483,11 +490,14 @@ class ChessComputer:
     # material left on the board. Returns a score number, in which positive
     # means white is better off, while negative means black is better of
     @staticmethod
-    def evaluate_board(chessboard, depth_left):
+    def evaluate_board(chessboard, depth_left, original_turn):
         total_score = 0
         total_score += ChessBoard.score_total_pieces(chessboard)
         if depth_left > 1:
-            total_score = total_score+(depth_left*10)
+            if(original_turn == Side.White):
+                total_score = total_score+(depth_left*10)
+            else:
+                total_score = total_score-(depth_left*10)
         return total_score
 
 # This class is responsible for starting the chess game, playing and user 
@@ -497,14 +507,14 @@ class ChessGame:
      
         # NOTE: you can make this depth higher once you have implemented
         # alpha-beta, which is more efficient
-        self.depth = 4
+        self.depth = 5
         self.chessboard = ChessBoard(turn)
 
         # If a file was specified as commandline argument, use that filename
         if len(sys.argv) > 1:
             filename = sys.argv[1]
         else:
-            filename = "board_test.chb"
+            filename = "board_configurations/mate_in_one2.chb"
 
         print("Reading from " + filename + "...")
         self.load_from_file(filename)
@@ -520,7 +530,7 @@ class ChessGame:
             print(self.chessboard)
 
             # Print the current score
-            score = ChessComputer.evaluate_board(self.chessboard,self.depth)
+            score = ChessComputer.evaluate_board(self.chessboard,self.depth,self.chessboard.turn)
             print("Current score: " + str(score))
             
             # Calculate the best possible move
