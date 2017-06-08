@@ -206,14 +206,35 @@ class ChessBoard:
             if y != 0:
                 y1 = y - 1
                 location_2 = (x,y1)
-                if self.check_occupied_by_self(location_2) == 0:
+                piece = self.get_boardpiece(location_2)
+                if piece == None:
                     move = [location_1, location_2]
+                if x != 0:
+                    x1 = x - 1
+                    location_2 = (x1, y1)
+                    if self.check_occupied_by_other(location_2) == 1:
+                        move = [location_1, location_2]
+                if x != 7:
+                    x1 = x + 1
+                    location_2 = (x1, y1)
+                    if self.check_occupied_by_other(location_2) == 1:
+                        move = [location_1, location_2]
         else:
             if y != 7:
                 y1 = y + 1
                 location_2 = (x,y1)
-                if self.check_occupied_by_self(location_2) == 0:
+                if self.check_occupied_by_self(location_2) == 1:
                     move = [location_1, location_2]
+                if x != 0:
+                    x1 = x - 1
+                    location_2 = (x1, y1)
+                    if self.check_occupied_by_other(location_2) == 1:
+                        move = [location_1, location_2]
+                if x != 7:
+                    x1 = x + 1
+                    location_2 = (x1, y1)
+                    if self.check_occupied_by_other(location_2) == 1:
+                        move = [location_1, location_2]
         return move
 
     def check_occupied_by_self(self, location):
@@ -453,6 +474,7 @@ class ChessGame:
     def main(self):
         while True:
             print(self.chessboard)
+            print(self.chessboard.legal_moves())
 
             # Print the current score
             score = ChessComputer.evaluate_board(self.chessboard,self.depth)
