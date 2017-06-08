@@ -195,7 +195,7 @@ class ChessBoard:
                             if moves != []:
                                 total_moves.extend(moves)
         total_moves = self.translate_coordinates(total_moves)
-        print(total_moves)
+        #print(total_moves)
         return total_moves
 
     def pawn_move(self, turn, location_1):
@@ -208,18 +208,12 @@ class ChessBoard:
                 location_2 = (x,y1)
                 if self.check_occupied_by_self(location_2) == 0:
                     move = [location_1, location_2]
-                else:
-                    print("occupied")
         else:
             if y != 7:
                 y1 = y + 1
                 location_2 = (x,y1)
                 if self.check_occupied_by_self(location_2) == 0:
                     move = [location_1, location_2]
-                else:
-                    print('occupied')
-        if move == []:
-            print("no moves possible!")
         return move
 
     def check_occupied_by_self(self, location):
@@ -346,8 +340,40 @@ class ChessBoard:
     # TODO: write an implementation for this function, implement it in terms
     # of legal_moves()
     def is_legal_move(self, move):
-        return True
+        if move in self.legal_moves():
+            return True
+        else:
+            return False
 
+    def score_total_pieces(chessboard):
+        score = 0
+        lower_bound = 0
+        upper_bound = 8
+        for y in range(lower_bound, upper_bound):
+            for x in range(lower_bound, upper_bound):
+                location = (x, y)
+                piece = chessboard.get_boardpiece(location)
+                if piece == None:
+                    continue
+                else:
+                    material = piece.material
+                    side = piece.side
+                    if material == Material.Pawn:
+                        if side == Side.White:
+                            score += 16
+                        else:
+                            score -= 16
+                    if material == Material.Rook:
+                        if side == Side.White:
+                            score += 64
+                        else:
+                            score -= 64
+                    else:
+                        if side == Side.White:
+                            score += 1600
+                        else:
+                            score -= 1600
+        return score
 
 # This static class is responsible for providing functions that can calculate
 # the optimal move using minimax
@@ -393,7 +419,11 @@ class ChessComputer:
     # means white is better off, while negative means black is better of
     @staticmethod
     def evaluate_board(chessboard, depth_left):
-        return 0
+        total_score = 0
+        total_score += ChessBoard.score_total_pieces(chessboard)
+        if depth_left > 1:
+            total_score = total_score/((depth_left-1)*2)
+        return total_score
 
 # This class is responsible for starting the chess game, playing and user 
 # feedback
@@ -423,8 +453,6 @@ class ChessGame:
     def main(self):
         while True:
             print(self.chessboard)
-
-            self.chessboard.legal_moves()
 
             # Print the current score
             score = ChessComputer.evaluate_board(self.chessboard,self.depth)

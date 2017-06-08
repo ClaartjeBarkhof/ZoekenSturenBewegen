@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a8670fe6-c9b7-4a76-afa4-363ac9f3bfd0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/board_test.chb" afterPath="$PROJECT_DIR$/board_test.chb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/chessgame.py" afterPath="$PROJECT_DIR$/chessgame.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,10 +34,41 @@
       <file leaf-file-name="chessgame.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/chessgame.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-285">
-              <caret line="194" column="28" lean-forward="true" selection-start-line="194" selection-start-column="28" selection-end-line="194" selection-end-column="28" />
+            <state relative-caret-position="375">
+              <caret line="397" column="32" lean-forward="true" selection-start-line="397" selection-start-column="32" selection-end-line="398" selection-end-column="52" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
+                <element signature="e#225#303#0" expanded="false" />
+                <element signature="e#434#535#0" expanded="false" />
+                <element signature="e#680#734#0" expanded="false" />
+                <element signature="e#912#944#0" expanded="false" />
+                <element signature="e#961#986#0" expanded="false" />
+                <element signature="e#1105#1201#0" expanded="false" />
+                <element signature="e#1335#12889#0" expanded="false" />
+                <element signature="e#1369#1486#0" expanded="false" />
+                <element signature="e#1576#1608#0" expanded="false" />
+                <element signature="e#1699#1754#0" expanded="false" />
+                <element signature="e#1851#1907#0" expanded="false" />
+                <element signature="e#2015#2845#0" expanded="false" />
+                <element signature="e#2908#3581#0" expanded="false" />
+                <element signature="e#3820#4505#0" expanded="false" />
+                <element signature="e#4549#4860#0" expanded="false" />
+                <element signature="e#5194#6444#0" expanded="false" />
+                <element signature="e#6497#7029#0" expanded="false" />
+                <element signature="e#7087#7252#0" expanded="false" />
+                <element signature="e#7311#7476#0" expanded="false" />
+                <element signature="e#7529#9016#0" expanded="false" />
+                <element signature="e#7624#7903#0" expanded="false" />
+                <element signature="e#7988#8267#0" expanded="false" />
+                <element signature="e#8352#8631#0" expanded="false" />
+                <element signature="e#8716#8995#0" expanded="false" />
+                <element signature="e#9069#11104#0" expanded="false" />
+                <element signature="e#9163#9878#0" expanded="false" />
+                <element signature="e#9910#10366#0" expanded="false" />
+                <element signature="e#10398#10854#0" expanded="false" />
+                <element signature="e#10886#11083#0" expanded="false" />
+                <element signature="e#11164#11437#0" expanded="false" />
+                <element signature="e#11841#12887#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -47,8 +77,8 @@
       <file leaf-file-name="board_test.chb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/board_test.chb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="3" lean-forward="false" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
+            <state relative-caret-position="30">
+              <caret line="2" column="3" lean-forward="false" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -63,6 +93,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>depth_le</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -76,7 +111,6 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="873" />
@@ -96,6 +130,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -111,7 +146,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="RecentsManager">
@@ -322,7 +356,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="23" width="1440" height="873" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -330,25 +364,48 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3221393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1641791" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/chessgame.py</url>
+          <line>328</line>
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/chessgame.py</url>
+          <line>67</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/chessgame.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/chessgame.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="4" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -366,6 +423,94 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#225#303#0" expanded="false" />
+            <element signature="e#434#535#0" expanded="false" />
+            <element signature="e#680#734#0" expanded="false" />
+            <element signature="e#912#944#0" expanded="false" />
+            <element signature="e#961#986#0" expanded="false" />
+            <element signature="e#1105#1201#0" expanded="false" />
+            <element signature="e#1335#12889#0" expanded="false" />
+            <element signature="e#1369#1486#0" expanded="false" />
+            <element signature="e#1576#1608#0" expanded="false" />
+            <element signature="e#1699#1754#0" expanded="false" />
+            <element signature="e#1851#1907#0" expanded="false" />
+            <element signature="e#2015#2845#0" expanded="false" />
+            <element signature="e#2908#3581#0" expanded="false" />
+            <element signature="e#3820#4505#0" expanded="false" />
+            <element signature="e#4549#4860#0" expanded="false" />
+            <element signature="e#5194#6444#0" expanded="false" />
+            <element signature="e#6497#7029#0" expanded="false" />
+            <element signature="e#7087#7252#0" expanded="false" />
+            <element signature="e#7311#7476#0" expanded="false" />
+            <element signature="e#7529#9016#0" expanded="false" />
+            <element signature="e#7624#7903#0" expanded="false" />
+            <element signature="e#7988#8267#0" expanded="false" />
+            <element signature="e#8352#8631#0" expanded="false" />
+            <element signature="e#8716#8995#0" expanded="false" />
+            <element signature="e#9069#11104#0" expanded="false" />
+            <element signature="e#9163#9878#0" expanded="false" />
+            <element signature="e#9910#10366#0" expanded="false" />
+            <element signature="e#10398#10854#0" expanded="false" />
+            <element signature="e#10886#11083#0" expanded="false" />
+            <element signature="e#11164#11437#0" expanded="false" />
+            <element signature="e#11841#12887#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/board_test.chb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="3" lean-forward="false" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Hello.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chessgame.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#225#303#0" expanded="false" />
+            <element signature="e#434#535#0" expanded="false" />
+            <element signature="e#680#734#0" expanded="false" />
+            <element signature="e#912#944#0" expanded="false" />
+            <element signature="e#961#986#0" expanded="false" />
+            <element signature="e#1105#1201#0" expanded="false" />
+            <element signature="e#1335#12889#0" expanded="false" />
+            <element signature="e#1369#1486#0" expanded="false" />
+            <element signature="e#1576#1608#0" expanded="false" />
+            <element signature="e#1699#1754#0" expanded="false" />
+            <element signature="e#1851#1907#0" expanded="false" />
+            <element signature="e#2015#2845#0" expanded="false" />
+            <element signature="e#2908#3581#0" expanded="false" />
+            <element signature="e#3820#4505#0" expanded="false" />
+            <element signature="e#4549#4860#0" expanded="false" />
+            <element signature="e#5194#6444#0" expanded="false" />
+            <element signature="e#6497#7029#0" expanded="false" />
+            <element signature="e#7087#7252#0" expanded="false" />
+            <element signature="e#7311#7476#0" expanded="false" />
+            <element signature="e#7529#9016#0" expanded="false" />
+            <element signature="e#7624#7903#0" expanded="false" />
+            <element signature="e#7988#8267#0" expanded="false" />
+            <element signature="e#8352#8631#0" expanded="false" />
+            <element signature="e#8716#8995#0" expanded="false" />
+            <element signature="e#9069#11104#0" expanded="false" />
+            <element signature="e#9163#9878#0" expanded="false" />
+            <element signature="e#9910#10366#0" expanded="false" />
+            <element signature="e#10398#10854#0" expanded="false" />
+            <element signature="e#10886#11083#0" expanded="false" />
+            <element signature="e#11164#11437#0" expanded="false" />
+            <element signature="e#11841#12887#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -395,18 +540,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/board_test.chb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="3" lean-forward="false" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
+        <state relative-caret-position="30">
+          <caret line="2" column="3" lean-forward="false" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="3" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/chessgame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-285">
-          <caret line="194" column="28" lean-forward="true" selection-start-line="194" selection-start-column="28" selection-end-line="194" selection-end-column="28" />
+        <state relative-caret-position="375">
+          <caret line="397" column="32" lean-forward="true" selection-start-line="397" selection-start-column="32" selection-end-line="398" selection-end-column="52" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#225#303#0" expanded="false" />
+            <element signature="e#434#535#0" expanded="false" />
+            <element signature="e#680#734#0" expanded="false" />
+            <element signature="e#912#944#0" expanded="false" />
+            <element signature="e#961#986#0" expanded="false" />
+            <element signature="e#1105#1201#0" expanded="false" />
+            <element signature="e#1335#12889#0" expanded="false" />
+            <element signature="e#1369#1486#0" expanded="false" />
+            <element signature="e#1576#1608#0" expanded="false" />
+            <element signature="e#1699#1754#0" expanded="false" />
+            <element signature="e#1851#1907#0" expanded="false" />
+            <element signature="e#2015#2845#0" expanded="false" />
+            <element signature="e#2908#3581#0" expanded="false" />
+            <element signature="e#3820#4505#0" expanded="false" />
+            <element signature="e#4549#4860#0" expanded="false" />
+            <element signature="e#5194#6444#0" expanded="false" />
+            <element signature="e#6497#7029#0" expanded="false" />
+            <element signature="e#7087#7252#0" expanded="false" />
+            <element signature="e#7311#7476#0" expanded="false" />
+            <element signature="e#7529#9016#0" expanded="false" />
+            <element signature="e#7624#7903#0" expanded="false" />
+            <element signature="e#7988#8267#0" expanded="false" />
+            <element signature="e#8352#8631#0" expanded="false" />
+            <element signature="e#8716#8995#0" expanded="false" />
+            <element signature="e#9069#11104#0" expanded="false" />
+            <element signature="e#9163#9878#0" expanded="false" />
+            <element signature="e#9910#10366#0" expanded="false" />
+            <element signature="e#10398#10854#0" expanded="false" />
+            <element signature="e#10886#11083#0" expanded="false" />
+            <element signature="e#11164#11437#0" expanded="false" />
+            <element signature="e#11841#12887#0" expanded="false" />
           </folding>
         </state>
       </provider>
