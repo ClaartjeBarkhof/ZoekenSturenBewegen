@@ -185,12 +185,12 @@ class ChessBoard:
                         if material == Material.Pawn:
                             move = self.pawn_move(turn, location)
                             if move != []:
-                                total_moves.append(move)
+                                total_moves.extend(move)
                         if material == Material.Rook:
                             moves = self.rook_move(turn, location)
                             if moves != []:
                                 total_moves.extend(moves)
-                        else:
+                        if material == Material.King:
                             moves = self.king_move(turn, location)
                             if moves != []:
                                 total_moves.extend(moves)
@@ -199,7 +199,7 @@ class ChessBoard:
         return total_moves
 
     def pawn_move(self, turn, location_1):
-        move = []
+        moves = []
         x = location_1[0]
         y = location_1[1]
         if turn == Side.White:
@@ -209,33 +209,39 @@ class ChessBoard:
                 piece = self.get_boardpiece(location_2)
                 if piece == None:
                     move = [location_1, location_2]
+                    moves.append(move)
                 if x != 0:
                     x1 = x - 1
                     location_2 = (x1, y1)
                     if self.check_occupied_by_other(location_2) == 1:
                         move = [location_1, location_2]
+                        moves.append(move)
                 if x != 7:
                     x1 = x + 1
                     location_2 = (x1, y1)
                     if self.check_occupied_by_other(location_2) == 1:
                         move = [location_1, location_2]
+                        moves.append(move)
         else:
             if y != 7:
                 y1 = y + 1
                 location_2 = (x,y1)
                 if self.check_occupied_by_self(location_2) == 1:
                     move = [location_1, location_2]
+                    moves.append(move)
                 if x != 0:
                     x1 = x - 1
                     location_2 = (x1, y1)
                     if self.check_occupied_by_other(location_2) == 1:
                         move = [location_1, location_2]
+                        moves.append(move)
                 if x != 7:
                     x1 = x + 1
                     location_2 = (x1, y1)
                     if self.check_occupied_by_other(location_2) == 1:
                         move = [location_1, location_2]
-        return move
+                        moves.append(move)
+        return moves
 
     def check_occupied_by_self(self, location):
         turn = self.turn
@@ -508,19 +514,16 @@ class ChessGame:
     def main(self):
         while True:
             print(self.chessboard)
-            print(self.chessboard.legal_moves())
-
-            print(self.chessboard.legal_moves())
 
             # Print the current score
             score = ChessComputer.evaluate_board(self.chessboard,self.depth)
             print("Current score: " + str(score))
             
             # Calculate the best possible move
-            new_score, best_move = self.make_computer_move()
+            #new_score, best_move = self.make_computer_move()
             
-            print("Best move: " + best_move)
-            print("Score to achieve: " + str(new_score))
+            #print("Best move: " + best_move)
+            #print("Score to achieve: " + str(new_score))
             print("")
             self.make_human_move()
 
