@@ -376,7 +376,6 @@ class ChessBoard:
         score = 0
         lower_bound = 0
         upper_bound = 8
-        turn = chessboard.turn
         for y in range(lower_bound, upper_bound):
             for x in range(lower_bound, upper_bound):
                 location = (x, y)
@@ -387,17 +386,17 @@ class ChessBoard:
                     material = piece.material
                     side = piece.side
                     if material == Material.Pawn:
-                        if turn == Side.White:
+                        if side == Side.White:
                             score += 1
                         else:
                             score -= 1
                     if material == Material.Rook:
-                        if turn == Side.White:
+                        if side == Side.White:
                             score += 5
                         else:
                             score -= 5
                     else:
-                        if turn == Side.White:
+                        if side == Side.White:
                             score += 100
                         else:
                             score -= 100
@@ -532,7 +531,8 @@ class ChessGame:
         if len(sys.argv) > 1:
             filename = sys.argv[1]
         else:
-            filename = "board_test1.chb"
+            filename = "board_configurations/mate_in_one1.chb"
+            #filename = "board_test1.chb"
 
         print("Reading from " + filename + "...")
         self.load_from_file(filename)
