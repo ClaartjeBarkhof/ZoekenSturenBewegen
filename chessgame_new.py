@@ -408,16 +408,15 @@ class ChessComputer:
     # depth of the search algorithm. It returns a tuple of (score, chessboard)
     # with score the maximum score attainable and chessboardmove that is needed
     #to achieve this score.
-    '''
-    if alphabeta:
-        inf = 99999999
-        min_inf = -inf
-        return ChessComputer.alphabeta(chessboard, depth, min_inf, inf)
-    else:
-    '''
+
     @staticmethod
     def computer_move(chessboard, depth, alphabeta=False):
-        return ChessComputer.minimax(chessboard, depth)
+        if alphabeta:
+            inf = 99999999
+            min_inf = -inf
+            return ChessComputer.alphabeta(chessboard, depth, min_inf, inf)
+        else:
+            return ChessComputer.minimax(chessboard, depth)
 
     # This function uses minimax to calculate the next move. Given the current
     # chessboard and max depth, this function should return a tuple of the
@@ -427,14 +426,15 @@ class ChessComputer:
     # TODO: write an implementation for this function
     @staticmethod
     def minimax(chessboard, depth):
-        infinity = 50000
+        inf = 99999999
+        min_inf = -inf
         turn = chessboard.turn
         if depth == 0 or chessboard.is_king_dead(Side.Black) or chessboard.is_king_dead(Side.White):
             return (ChessComputer.evaluate_board(chessboard, depth), "there is no move anymore")
 
         # Maximizer white
         if turn == Side.White:
-            bestValue = -infinity
+            bestValue = min_inf
             bestMove = None
             for move in chessboard.legal_moves():
                 new_board = chessboard.make_move(move)
@@ -446,7 +446,7 @@ class ChessComputer:
 
         # Minimizer black
         else:
-            bestValue = infinity
+            bestValue = inf
             bestMove = None
             for move in chessboard.legal_moves():
                 new_board = chessboard.make_move(move)
@@ -464,7 +464,41 @@ class ChessComputer:
     # of a specific board configuration after the max depth is reached
     @staticmethod
     def alphabeta(chessboard, depth, alpha, beta):
-        return (0, "no implementation written")
+        turn = chessboard.turn
+        if depth == 0 or chessboard.is_king_dead(Side.Black) or chessboard.is_king_dead(Side.White):
+            return (ChessComputer.evaluate_board(chessboard, depth), "there is no move anymore")
+
+        # Maximizer white
+        if turn == Side.White:
+            bestValue = alpha
+            bestMove = None
+            for move in chessboard.legal_moves():
+                new_board = chessboard.make_move(move)
+                value, move1 = ChessComputer.alphabeta(new_board, depth-1, alpha, beta)
+                if value > bestValue:
+                    bestValue = value
+                    bestMove = move
+                if value > alpha:
+                    alpha = value
+                if beta <= alpha:
+                    break
+            return (bestValue, bestMove)
+
+        # Minimizer black
+        else:
+            bestValue = beta
+            bestMove = None
+            for move in chessboard.legal_moves():
+                new_board = chessboard.make_move(move)
+                value, move1 = ChessComputer.alphabeta(new_board, depth-1, alpha, beta)
+                if value < bestValue:
+                    bestValue = value
+                    bestMove = move
+                if value < beta:
+                    beta = value
+                if beta <= alpha
+                    break
+        return (bestValue, bestMove)
 
     # Calculates the score of a given board configuration based on the 
     # material left on the board. Returns a score number, in which positive
@@ -474,7 +508,7 @@ class ChessComputer:
         total_score = 0
         total_score += ChessBoard.score_total_pieces(chessboard)
         #print("total_score without depth", total_score)
-        total_score = total_score*(depth_left*10)
+        total_score = total_score*(depth_left)
         return total_score
 
 # This class is responsible for starting the chess game, playing and user 
