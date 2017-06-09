@@ -501,7 +501,6 @@ class ChessBoard:
         else:
             return False
 
-
 # This static class is responsible for providing functions that can calculate
 # the optimal move using minimax
 class ChessComputer:
@@ -510,7 +509,6 @@ class ChessComputer:
     # depth of the search algorithm. It returns a tuple of (score, chessboard)
     # with score the maximum score attainable and chessboardmove that is needed
     # to achieve this score.
-
     @staticmethod
     def computer_move(chessboard, depth, alphabeta=False):
         if alphabeta:
@@ -521,11 +519,8 @@ class ChessComputer:
             return ChessComputer.minimax(chessboard, depth)
 
     # This function uses minimax to calculate the next move. Given the current
-    # chessboard and max depth, this function should return a tuple of the
+    # chessboard and max depth, this function returns a tuple of the
     # the score and the move that should be executed
-    # NOTE: use ChessComputer.evaluate_board() to calculate the score
-    # of a specific board configuration after the max depth is reached
-    # TODO: write an implementation for this function
     @staticmethod
     def minimax(chessboard, depth):
         inf = 99999999
@@ -559,11 +554,9 @@ class ChessComputer:
             return (bestValue, bestMove)
 
     # This function uses alphabeta to calculate the next move. Given the
-    # chessboard and max depth, this function should return a tuple of the
+    # chessboard and max depth, this function returns a tuple of the
     # the score and the move that should be executed.
     # It has alpha and beta as extra pruning parameters
-    # NOTE: use ChessComputer.evaluate_board() to calculate the score
-    # of a specific board configuration after the max depth is reached
     @staticmethod
     def alphabeta(chessboard, depth, alpha, beta):
         turn = chessboard.turn
@@ -602,9 +595,8 @@ class ChessComputer:
                     break
         return (bestValue, bestMove)
 
-    # Calculates the score of a given board configuration based on the
-    # material left on the board. Returns a score number, in which positive
-    # means white is better off, while negative means black is better of
+    # This function takes the total score of all the pieces from score_total_pieces
+    # Then multiplies it to the depth left. Returns the total score.
     @staticmethod
     def evaluate_board(chessboard, depth_left):
         total_score = 0
@@ -614,6 +606,9 @@ class ChessComputer:
             total_score = total_score*(depth_left*10)
         return total_score
 
+    # This function calculates the score for each piece on the board.
+    # White is positive and black counts negative returns the total
+    # score of al the pieces
     @staticmethod
     def score_total_pieces(chessboard):
         score = 0
