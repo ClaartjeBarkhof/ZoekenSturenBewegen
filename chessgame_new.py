@@ -33,7 +33,7 @@ def to_move(from_coord, to_coord):
 # - Side.White
 # - Side.Black
 class Material:
-    Rook, King, Pawn = ['r','k','p']
+    Rook, King, Pawn, Queen, Horse = ['r','k','p','q','h']
 class Side:
     White, Black = range(0,2)
 
@@ -196,6 +196,9 @@ class ChessBoard:
         total_moves = self.translate_coordinates(total_moves)
         #print(total_moves)
         return total_moves
+
+    def horse_move(self, turn, location_1):
+        moves = []
 
     def pawn_move(self, turn, location_1):
         moves = []
