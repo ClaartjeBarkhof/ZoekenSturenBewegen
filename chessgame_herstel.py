@@ -2,6 +2,7 @@ from __future__ import print_function
 from copy import deepcopy
 import sys
 
+
 ## Helper functions
 
 # Translate a position in chess notation to x,y-coordinates
@@ -11,18 +12,21 @@ def to_coordinate(notation):
     y = 8 - int(notation[1])
     return (x, y)
 
+
 # Translate a position in x,y-coordinates to chess notation
 # Example: (2,5) corresponds to c3
 def to_notation(coordinates):
-    (x,y) = coordinates
+    (x, y) = coordinates
     letter = chr(ord('a') + x)
     number = 8 - y
     return letter + str(number)
+
 
 # Translates two x,y-coordinates into a chess move notation
 # Example: (1,4) and (2,3) will become b4c5
 def to_move(from_coord, to_coord):
     return to_notation(from_coord) + to_notation(to_coord)
+
 
 ## Defining board states
 
@@ -33,9 +37,11 @@ def to_move(from_coord, to_coord):
 # - Side.White
 # - Side.Black
 class Material:
-    Rook, King, Pawn = ['r','k','p']
+    Rook, King, Pawn, Queen, Horse = ['r', 'k', 'p', 'q', 'h']
+
 class Side:
-    White, Black = range(0,2)
+    White, Black = range(0, 2)
+
 
 # A chesspiece on the board is specified by the side it belongs to and the type
 # of the chesspiece
@@ -48,29 +54,27 @@ class Piece:
 # A chess configuration is specified by whose turn it is and a 2d array
 # with all the pieces on the board
 class ChessBoard:
-    
     def __init__(self, turn):
         # This variable is either equal to Side.White or Side.Black
         self.turn = turn
         self.board_matrix = None
 
-
-    ## Getter and setter methods 
-    def set_board_matrix(self,board_matrix):
+    ## Getter and setter methods
+    def set_board_matrix(self, board_matrix):
         self.board_matrix = board_matrix
 
     # Note: assumes the position is valid
-    def get_boardpiece(self,position):
-        (x,y) = position
+    def get_boardpiece(self, position):
+        (x, y) = position
         return self.board_matrix[y][x]
 
     # Note: assumes the position is valid
-    def set_boardpiece(self,position,piece):
-        (x,y) = position
+    def set_boardpiece(self, position, piece):
+        (x, y) = position
         self.board_matrix[y][x] = piece
-    
+
     # Read in the board_matrix using an input string
-    def load_from_input(self,input_str):
+    def load_from_input(self, input_str):
         self.board_matrix = [[None for _ in range(8)] for _ in range(8)]
         x = 0
         y = 0
@@ -89,8 +93,8 @@ class ChessBoard:
             if char == '\n':
                 x = 0
                 y += 1
-                continue 
-            
+                continue
+
             if char.isupper():
                 side = Side.White
             else:
@@ -98,7 +102,7 @@ class ChessBoard:
             material = char.lower()
 
             piece = Piece(side, material)
-            self.set_boardpiece((x,y),piece)
+            self.set_boardpiece((x, y), piece)
             x += 1
 
     # Print the current board state
@@ -108,7 +112,7 @@ class ChessBoard:
         return_str += "   abcdefgh\n\n"
         y = 8
         for board_row in self.board_matrix:
-            return_str += str(y) + "  " 
+            return_str += str(y) + "  "
             for piece in board_row:
                 if piece == None:
                     return_str += "."
@@ -119,8 +123,8 @@ class ChessBoard:
                     return_str += char
             return_str += '\n'
             y -= 1
-        
-        turn_name = ("White" if self.turn == Side.White else "Black") 
+
+        turn_name = ("White" if self.turn == Side.White else "Black")
         return_str += "It is " + turn_name + "'s turn\n"
 
         return return_str
@@ -129,7 +133,7 @@ class ChessBoard:
     # with the new board situation
     # Note: this method assumes the move suggested is a valid, legal move
     def make_move(self, move_str):
-        
+
         start_pos = to_coordinate(move_str[0:2])
         end_pos = to_coordinate(move_str[2:4])
 
@@ -137,10 +141,10 @@ class ChessBoard:
             turn = Side.Black
         else:
             turn = Side.White
-            
+
         # Duplicate the current board_matrix
         new_matrix = [row[:] for row in self.board_matrix]
-        
+
         # Create a new chessboard object
         new_board = ChessBoard(turn)
         new_board.set_board_matrix(new_matrix)
@@ -156,12 +160,12 @@ class ChessBoard:
         seen_king = False
         for x in range(8):
             for y in range(8):
-                piece = self.get_boardpiece((x,y))
+                piece = self.get_boardpiece((x, y))
                 if piece != None and piece.side == side and \
-                        piece.material == Material.King:
+                                piece.material == Material.King:
                     seen_king = True
         return not seen_king
-    
+
     # This function should return, given the current board configuation and
     # which players turn it is, all the moves possible for that player
     # It should return these moves as a list of move strings, e.g.
@@ -172,9 +176,9 @@ class ChessBoard:
         upper_bound = 8
         turn = self.turn
         total_moves = []
-        for y in range(lower_bound,upper_bound):
-            for x in range(lower_bound,upper_bound):
-                location = (x,y)
+        for y in range(lower_bound, upper_bound):
+            for x in range(lower_bound, upper_bound):
+                location = (x, y)
                 piece = self.get_boardpiece(location)
                 if piece == None:
                     continue
@@ -193,11 +197,125 @@ class ChessBoard:
                             moves = self.king_move(turn, location)
                             if moves != []:
                                 total_moves.extend(moves)
+                        if material == Material.Queen:
+                            moves = self.queen_move(turn, location)
+                            if moves != []:
+                                total_moves.extend(moves)
+                        if material == Material.Horse:
+                            moves = self.horse_move(turn, location)
+                            if move != []:
+                                total_moves.extend(moves)
         total_moves = self.translate_coordinates(total_moves)
-        #print(total_moves)
+        # print(total_moves)
         return total_moves
 
+    def horse_move(self, turn, location_1):
+        moves = []
+        x = location_1[0]
+        y = location_1[1]
+        if y > 1:
+            y1 = y - 2
+            if x != 0:
+                x1 = x - 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+            if x != 8:
+                x1 = x + 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+        if y < 6:
+            y1 = y + 2
+            if x != 0:
+                x1 = x - 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+            if x != 8:
+                x1 = x + 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+        if x > 1:
+            x1 = x - 2
+            if y != 0:
+                y1 = y - 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+            if y != 8:
+                y1 = y + 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+        if x < 6:
+            x1 = x + 2
+            if y != 0:
+                y1 = y - 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+            if y != 8:
+                y1 = y + 1
+                location_2 = (x1, y1)
+                if self.check_occupied_by_self(location_2) == 0:
+                    move = (location_1, location_2)
+                    moves.append(move)
+        return moves
 
+    def queen_move(self, turn, location_1):
+        moves = []
+        location_2 = list(location_1)
+        rook_moves = self.rook_move(turn, location_1)
+        moves.extend(rook_moves)
+        while location_2[0] != 7 and location_2[1] != 0:
+            location_2[0] += 1
+            location_2[1] -= 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        location_2 = list(location_1)
+        while location_2[0] != 7 and location_2[1] != 7:
+            location_2[0] += 1
+            location_2[1] += 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        location_2 = list(location_1)
+        while location_2[0] != 0 and location_2[1] != 7:
+            location_2[0] -= 1
+            location_2[1] += 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        location_2 = list(location_1)
+        while location_2[0] != 0 and location_2[1] != 0:
+            location_2[0] -= 1
+            location_2[1] -= 1
+            if self.check_occupied_by_self(tuple(location_2)) == 0:
+                moves.append([location_1, tuple(location_2)])
+            else:
+                break
+            if self.check_occupied_by_other(tuple(location_2)) == 1:
+                break
+        return moves
 
     def pawn_move(self, turn, location_1):
         moves = []
@@ -206,7 +324,7 @@ class ChessBoard:
         if turn == Side.White:
             if y != 0:
                 y1 = y - 1
-                location_2 = (x,y1)
+                location_2 = (x, y1)
                 piece = self.get_boardpiece(location_2)
                 if piece == None:
                     move = [location_1, location_2]
@@ -226,7 +344,7 @@ class ChessBoard:
         else:
             if y != 7:
                 y1 = y + 1
-                location_2 = (x,y1)
+                location_2 = (x, y1)
                 if self.check_occupied_by_self(location_2) == 1:
                     move = [location_1, location_2]
                     moves.append(move)
@@ -389,7 +507,7 @@ class ChessBoard:
                             score += 1
                         else:
                             score -= 1
-                    if (material == Material.Rook):
+                    if (material == Material.Rook) or (material == Material.Horse):
                         if side == Side.White:
                             score += 5
                         else:
@@ -399,20 +517,25 @@ class ChessBoard:
                             score += 100
                         else:
                             score -= 100
+                    if material == Material.Queen:
+                        if side == Side.White:
+                            score += 50
+                        else:
+                            score -= 50
         return score
+
 
 # This static class is responsible for providing functions that can calculate
 # the optimal move using minimax
 class ChessComputer:
-
     # This method uses either alphabeta or minimax to calculate the best move
     # possible. The input needed is a chessboard configuration and the max
     # depth of the search algorithm. It returns a tuple of (score, chessboard)
     # with score the maximum score attainable and chessboardmove that is needed
-    #to achieve this score.
+    # to achieve this score.
 
     @staticmethod
-    def computer_move(chessboard, depth, alphabeta=True):
+    def computer_move(chessboard, depth, alphabeta=False):
         if alphabeta:
             inf = 99999999
             min_inf = -inf
@@ -440,7 +563,7 @@ class ChessComputer:
             bestMove = None
             for move in chessboard.legal_moves():
                 new_board = chessboard.make_move(move)
-                value, move1 = ChessComputer.minimax(new_board, depth-1)
+                value, move1 = ChessComputer.minimax(new_board, depth - 1)
                 if value > bestValue:
                     bestValue = value
                     bestMove = move
@@ -452,7 +575,7 @@ class ChessComputer:
             bestMove = None
             for move in chessboard.legal_moves():
                 new_board = chessboard.make_move(move)
-                value, move1 = ChessComputer.minimax(new_board, depth-1)
+                value, move1 = ChessComputer.minimax(new_board, depth - 1)
                 if value < bestValue:
                     bestValue = value
                     bestMove = move
@@ -476,7 +599,7 @@ class ChessComputer:
             bestMove = None
             for move in chessboard.legal_moves():
                 new_board = chessboard.make_move(move)
-                value, move1 = ChessComputer.alphabeta(new_board, depth-1, alpha, beta)
+                value, move1 = ChessComputer.alphabeta(new_board, depth - 1, alpha, beta)
                 if value > bestValue:
                     bestValue = value
                     bestMove = move
@@ -492,7 +615,7 @@ class ChessComputer:
             bestMove = None
             for move in chessboard.legal_moves():
                 new_board = chessboard.make_move(move)
-                value, move1 = ChessComputer.alphabeta(new_board, depth-1, alpha, beta)
+                value, move1 = ChessComputer.alphabeta(new_board, depth - 1, alpha, beta)
                 if value < bestValue:
                     bestValue = value
                     bestMove = move
@@ -502,7 +625,7 @@ class ChessComputer:
                     break
         return (bestValue, bestMove)
 
-    # Calculates the score of a given board configuration based on the 
+    # Calculates the score of a given board configuration based on the
     # material left on the board. Returns a score number, in which positive
     # means white is better off, while negative means black is better of
     @staticmethod
@@ -514,22 +637,23 @@ class ChessComputer:
             total_score = total_score*(depth_left*10)
         return total_score
 
-# This class is responsible for starting the chess game, playing and user 
+
+# This class is responsible for starting the chess game, playing and user
 # feedback
 class ChessGame:
     def __init__(self, turn):
-     
+
         # NOTE: you can make this depth higher once you have implemented
         # alpha-beta, which is more efficient
-        self.depth = 6
+        self.depth = 5
         self.chessboard = ChessBoard(turn)
 
         # If a file was specified as commandline argument, use that filename
         if len(sys.argv) > 1:
             filename = sys.argv[1]
         else:
-            filename = "board_test1.chb"
-            #filename = "board_test1.chb"
+            filename = "board_configurations/mate_in_two1.chb"
+            # filename = "board_test1.chb"
 
         print("Reading from " + filename + "...")
         self.load_from_file(filename)
@@ -537,20 +661,20 @@ class ChessGame:
     def load_from_file(self, filename):
         with open(filename) as f:
             content = f.read()
+
         self.chessboard.load_from_input(content)
 
     def main(self):
         while True:
             print(self.chessboard)
-            print(self.chessboard.legal_moves())
 
             # Print the current score
-            score = ChessComputer.evaluate_board(self.chessboard,self.depth)
+            score = ChessComputer.evaluate_board(self.chessboard, self.depth)
             print("Current score: " + str(score))
-            
+
             # Calculate the best possible move
             new_score, best_move = self.make_computer_move()
-            
+
             print("Best move: " + best_move)
             print("Score to achieve: " + str(new_score))
             print("")
@@ -558,11 +682,10 @@ class ChessGame:
             print(self.chessboard.make_move(best_move))
             self.make_human_move()
 
-
     def make_computer_move(self):
         print("Calculating best move...")
         return ChessComputer.computer_move(self.chessboard,
-                self.depth, alphabeta=True)
+                                           self.depth, alphabeta=True)
 
     def make_human_move(self):
         # Endlessly request input until the right input is specified
@@ -590,6 +713,6 @@ class ChessGame:
             print("Black wins!")
             sys.exit(0)
 
-chess_game = ChessGame(Side.White)
-chess_game.main()
 
+chess_game = ChessGame(Side.Black)
+chess_game.main()
