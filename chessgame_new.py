@@ -410,7 +410,7 @@ class ChessComputer:
     #to achieve this score.
 
     @staticmethod
-    def computer_move(chessboard, depth, alphabeta=False):
+    def computer_move(chessboard, depth, alphabeta=True):
         if alphabeta:
             inf = 99999999
             min_inf = -inf
@@ -496,7 +496,7 @@ class ChessComputer:
                     bestMove = move
                 if value < beta:
                     beta = value
-                if beta <= alpha
+                if beta <= alpha:
                     break
         return (bestValue, bestMove)
 
@@ -519,7 +519,7 @@ class ChessGame:
      
         # NOTE: you can make this depth higher once you have implemented
         # alpha-beta, which is more efficient
-        self.depth = 5
+        self.depth = 6
         self.chessboard = ChessBoard(turn)
 
         # If a file was specified as commandline argument, use that filename
