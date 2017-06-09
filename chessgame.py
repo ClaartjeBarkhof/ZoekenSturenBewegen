@@ -3,12 +3,36 @@ from copy import deepcopy
 import sys
 
 ################################
-# ZSB                          #
+# ZSB - Opdracht 1             #
+# chessgame.py                 #
+# 09/06/2017                   #
 #                              #
 # Anna Stalknecht - 10792872   #
 # Claartje Barkhof - 11035129  #
+# Group C                      #
 #                              #
 ################################
+
+# This file contains a program to play simple chess in an optimal manner.
+# It uses minimax + alphabeta pruning algorithm to look a few steps
+# ahead and compute based on the logically future situations the best
+# next move for each player. We used a given set of board configurations
+# to test the software. We also implemented some board configurations
+# ourselves to make sure additional features worked as well.
+# An example of such a board:
+#
+#   p.p.....
+#   pkp.....
+#   p.p.....
+#   ......K.
+#   ........
+#   .......r
+#   ........
+#   .......Q
+#   W
+#
+# The additional features consist of two 'new' pieces. A queen and
+# a horse.
 
 ## Helper functions
 
@@ -217,8 +241,9 @@ class ChessBoard:
         # print(total_moves)
         return total_moves
 
-    # This function returns all possible moves for a horse, given a
-    # location and which players turn it is.
+    # The following functions return all possible moves for a horse, queen,
+    # pawn, rook and king given it's location and which players turn it is.
+    # The functions take into account the other pieces on the board.
     def horse_move(self, turn, location_1):
         moves = []
         x = location_1[0]
@@ -372,22 +397,6 @@ class ChessBoard:
                         moves.append(move)
         return moves
 
-    def check_occupied_by_self(self, location):
-        turn = self.turn
-        piece = self.get_boardpiece(location)
-        if piece != None:
-            if piece.side == turn:
-                return 1
-        return 0
-
-    def check_occupied_by_other(self, location):
-        turn = self.turn
-        piece = self.get_boardpiece(location)
-        if piece != None:
-            if piece.side != turn:
-                return 1
-        return 0
-
     def rook_move(self, turn, location_1):
         location_2 = list(location_1)
         moves = []
@@ -482,6 +491,31 @@ class ChessBoard:
                 moves.append(move)
         return moves
 
+    # Check if a certain location on a given board config is occupied
+    # by a piece of the player who's turn it is. Returns 1 in case
+    # of occupation, 0 otherwise.
+    def check_occupied_by_self(self, location):
+        turn = self.turn
+        piece = self.get_boardpiece(location)
+        if piece != None:
+            if piece.side == turn:
+                return 1
+        return 0
+
+    # Check if a certain location on a given board config is occupied
+    # by a piece of the opposite player who's turn it is. Returns 1 in case
+    # of occupation, 0 otherwise.
+    def check_occupied_by_other(self, location):
+        turn = self.turn
+        piece = self.get_boardpiece(location)
+        if piece != None:
+            if piece.side != turn:
+                return 1
+        return 0
+
+    # Takes a list of moves represented as a list of two locations e.g.
+    # [(x1,y1), (x2,y2)] and translates it to and returns a list of moves
+    # represented like ['d2d3', 'd2e2'].
     def translate_coordinates(self, total_moves):
         total_moves_notation = []
         for move in total_moves:
@@ -491,16 +525,13 @@ class ChessBoard:
             total_moves_notation.append(notation_move)
         return total_moves_notation
 
-    # This function should return, given the move specified (in the format
+    # This function returns, given the move specified (in the format
     # 'd2d3') whether this move is legal
-    # TODO: write an implementation for this function, implement it in terms
-    # of legal_moves()
     def is_legal_move(self, move):
         if move in self.legal_moves():
             return True
         else:
             return False
-
 
 # This static class is responsible for providing functions that can calculate
 # the optimal move using minimax
@@ -512,7 +543,7 @@ class ChessComputer:
     # to achieve this score.
 
     @staticmethod
-    def computer_move(chessboard, depth, alphabeta=False):
+    def computer_move(chessboard, depth, alphabeta=True):
         if alphabeta:
             inf = 99999999
             min_inf = -inf
@@ -521,11 +552,8 @@ class ChessComputer:
             return ChessComputer.minimax(chessboard, depth)
 
     # This function uses minimax to calculate the next move. Given the current
-    # chessboard and max depth, this function should return a tuple of the
+    # chessboard and max depth, this function returns a tuple of the
     # the score and the move that should be executed
-    # NOTE: use ChessComputer.evaluate_board() to calculate the score
-    # of a specific board configuration after the max depth is reached
-    # TODO: write an implementation for this function
     @staticmethod
     def minimax(chessboard, depth):
         inf = 99999999
@@ -655,7 +683,7 @@ class ChessGame:
 
         # NOTE: you can make this depth higher once you have implemented
         # alpha-beta, which is more efficient
-        self.depth = 5
+        self.depth = 4
         self.chessboard = ChessBoard(turn)
 
         # If a file was specified as commandline argument, use that filename
@@ -688,8 +716,6 @@ class ChessGame:
             print("Best move: " + best_move)
             print("Score to achieve: " + str(new_score))
             print("")
-            print("new board is:")
-            print(self.chessboard.make_move(best_move))
             self.make_human_move()
 
     def make_computer_move(self):
