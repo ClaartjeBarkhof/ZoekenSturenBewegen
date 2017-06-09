@@ -474,7 +474,8 @@ class ChessComputer:
         total_score = 0
         total_score += ChessBoard.score_total_pieces(chessboard)
         #print("total_score without depth", total_score)
-        total_score = total_score*(depth_left*10)
+        if depth_left > 0:
+            total_score = total_score*(depth_left*10)
         return total_score
 
 # This class is responsible for starting the chess game, playing and user 
@@ -484,7 +485,7 @@ class ChessGame:
      
         # NOTE: you can make this depth higher once you have implemented
         # alpha-beta, which is more efficient
-        self.depth = 4
+        self.depth = 5
         self.chessboard = ChessBoard(turn)
 
         # If a file was specified as commandline argument, use that filename

@@ -438,7 +438,6 @@ class ChessComputer:
             new_board = chessboard.make_move(move)
             #print("NEW BOARD")
             #print(new_board)
-
             if original_turn == Side.White:
                 value = ChessComputer.min_value(new_board, depth-1, original_turn)
                 #print("Value of this board is", value)
