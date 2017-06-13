@@ -6,20 +6,20 @@ class UMI_parameters:
     def __init__(self):
         # Specifications of UMI
         # Zed
-        self.hpedestal = 0.1 # ???? in meters
-        self.pedestal_offset = 0.1 # ???? in meters
+        self.hpedestal = 1.082 # di van riser/zed / 1000
+        self.pedestal_offset = 0.0675 # ai van riser/zed / 1000
         self.wpedestal = 0.1 # just leave it 0.1
 
         # Dimensions upper arm
-        self.upper_length = 0.1 # ???? in meters
-        self.upper_height = 0.1 # ???? in meters
+        self.upper_length = 0.2535 # ???? in meters (som van pythagoras van (ai + di), vd riser/zed-shoulder + shoulder-elbow)
+        self.upper_height = 0.095 # ???? in meters (som van d1 + d2, oftewel z-verschuiving, vd riser/zed + shoulder)
 
         # Dimensions lower arm
-        self.lower_length = 0.1 # ???? in meters
-        self.lower_height = 0.1 # ???? in meters
+        self.lower_length = 0.2535 # ???? in meters (som van pythagoras van (ai + di), vd elbow-wrist + wrist-gripper)
+        self.lower_height = 0.080 # ???? in meters (som d3+d4)
 
         # Dimensions wrist
-        self.wrist_height = 0.1 # ???? in meters
+        self.wrist_height = 0.09 # ???? in meters
 
         # Height of the arm from the very top of the riser, to the tip of the gripper.
         self.total_arm_height = self.pedestal_offset + self.upper_height \
@@ -32,7 +32,7 @@ class UMI_parameters:
         self.joint_ranges = {
             "Riser"     : [0.0, 0.925],
             "Shoulder"  : [-90.0, 90.0],
-            "Elbow"     : [180.0, 110.0],
+            "Elbow"     : [110.0, 180.0],
             "Wrist"     : [-110.0, 110.0],
             "Gripper"   : [0, 0.05]
         }
