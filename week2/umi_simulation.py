@@ -374,7 +374,7 @@ UMI_angles = [UMI.joint_ranges["Riser"][1], 0, 0, 0, 0.05]
 while(True):
     rate(100)
     # TIP: If you want to know at all time, what the x,y,z of your robot arm is,
-    # print(get_gripper_bottom_position())
+    #print("tip of gripper at:",get_gripper_bottom_position())
     disp.center=get_gripper_bottom_position()
 #End Program
 0

@@ -45,8 +45,39 @@ def board_position_to_cartesian(chessboard, position):
 
         :return: tuple Return a position in the format (x,y,z)
     '''
+    half_pi = (math.pi/2)
     # Get the local coordinates for the tiles on the board in the 0-7 range.
-    (row, column) = to_coordinate(position)
+    #(row, column) = to_coordinate(position)
+    letter_list = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
+    number_list = [8,7,6,5,4,3,2,1]
+    field_size = chessboard.field_size #meters
+    (x_h8, y_h8, z_h8) = chessboard.get_position()
+
+    for index, s in enumerate(letter_list):
+        row = index
+
+    for index, s in enumerate(number_list):
+        column = index
+
+    board_angle_radians = chessboard.get_angle_radians()
+    print("angle is", angle)
+
+    world_coordinate_y = chessboard.get_board_height()
+
+    # letter-direction (h to a)
+    x1 = sin(board_angle_radians+half_pi) * (row+0.5) * field_size
+    print("x1=", x1)
+    z1 = cos(board_angle_radians+half_pi) * (row+0.5) * field_size
+    print("z1=", z1)
+
+    # number-direction (8 to 1)
+    x2 = sin(board_angle_radians) * (column+0.5) * field_size
+    print("x2=",x2)
+    z2 = cos(board_angle_radians) * (column+0.5) * field_size
+    print("z2=",z2)
+
+    world_coordinate_x = x1+x2+x_h8
+    world_coordinate_z = z1+z2+z_h8
 
     # h8 is closes to the rotation point, row a[1-8] is furthest away from the robot arm.
 
@@ -54,6 +85,7 @@ def board_position_to_cartesian(chessboard, position):
 
     # Output the results.
     result = (world_coordinate_x, world_coordinate_y, world_coordinate_z)
+    # print(result)
 
     return result
 

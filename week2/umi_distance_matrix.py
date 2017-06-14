@@ -4,7 +4,7 @@ from umi_common import *
 from collections import deque
 class Distance_matrix:
     '''
-        This class it implements a distance matrix. It can be used
+        This class implements a distance matrix. It can be used
         to make a distance transform of the chess board locations.
     '''
     OCCUPIED = -1
