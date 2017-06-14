@@ -45,19 +45,27 @@ def board_position_to_cartesian(chessboard, position):
 
         :return: tuple Return a position in the format (x,y,z)
     '''
-    half_pi = (math.pi/2)
-    # Get the local coordinates for the tiles on the board in the 0-7 range.
-    #(row, column) = to_coordinate(position)
-    letter_list = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
-    number_list = [8,7,6,5,4,3,2,1]
-    field_size = chessboard.field_size #meters
-    (x_h8, y_h8, z_h8) = chessboard.get_position()
+    if(position == 'j5'):
+        row = -2
+        column = 3
+    else:
+        half_pi = (math.pi/2)
+        letter = position[0]
+        number = int(position[1])
+        print("notation:", letter, number)
 
-    for index, s in enumerate(letter_list):
-        row = index
+        # Get the local coordinates for the tiles on the board in the 0-7 range.
+        #(row, column) = to_coordinate(position)
 
-    for index, s in enumerate(number_list):
-        column = index
+        letter_list = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
+        number_list = [8,7,6,5,4,3,2,1]
+        field_size = chessboard.field_size #meters
+        (x_h8, y_h8, z_h8) = chessboard.get_position()
+
+        column = letter_list.index(letter)
+        row = number_list.index(number)
+
+    print("row/column=", row, column)
 
     board_angle_radians = chessboard.get_angle_radians()
     print("angle is", angle)
@@ -76,16 +84,13 @@ def board_position_to_cartesian(chessboard, position):
     z2 = cos(board_angle_radians) * (column+0.5) * field_size
     print("z2=",z2)
 
+    # Rotation + translation together form the following coordinates in the world:
     world_coordinate_x = x1+x2+x_h8
     world_coordinate_z = z1+z2+z_h8
 
-    # h8 is closes to the rotation point, row a[1-8] is furthest away from the robot arm.
-
-    # ????? Perform the calculations, also take a rotation and translation of the chessboard in account!
-
     # Output the results.
     result = (world_coordinate_x, world_coordinate_y, world_coordinate_z)
-    # print(result)
+    print("print world_coordinates:",result)
 
     return result
 
@@ -103,39 +108,50 @@ def high_path(chessboard, from_pos, to_pos):
     # We assume that 10 centimeter above the board is "low".
     low_height = 0.1
 
+    # Get the coordinates.
+    print("FROM")
+    (from_x,from_y,from_z) = board_position_to_cartesian(chessboard, from_pos)
+    print("TO")
+    (to_x,to_y,to_z) = board_position_to_cartesian(chessboard, to_pos)
+
     # Define half_piece height (you want to grab the middle of a piece, so get the height of the piece on a position.)
     # (*cough* this data might be stored in a chessboard *cough*)
     # You might need if statements around this, but you have to fill this variable regardlessly.
-    half_piece_height = 0 # ????
-
-    # Get the coordinates.
-    (from_x, from_y, from_z) = board_position_to_cartesian(chessboard, from_pos)
-    (to_x, to_y, to_z) = board_position_to_cartesian(chessboard, to_pos)
+    [nonsense, material, colour] = chessboard.pieces[from_pos]
+    half_piece_height = chessboard.pieces_height[material]/2
 
     REPLACE_THIS_WITH_YOUR_OWN_CODE = "wrong"
     # Hover above the first field on SAFE height:
-    sequence_list.append(apply_inverse_kinematics(from_x, REPLACE_THIS_WITH_YOUR_OWN_CODE, from_z, chessboard.field_size))
+    sequence_list.append(apply_inverse_kinematics(from_x, safe_height, from_z, chessboard.field_size))
+
     # Hover above the first field on LOW height:
+    sequence_list.append(apply_inverse_kinematics(from_x, low_height, from_z, chessboard.field_size))
 
     # Hover above the first field on half of the piece height:
-
-    # Hover above the first field on half of the piece height:
+    sequence_list.append(apply_inverse_kinematics(from_x, half_piece_height, from_z, chessboard.field_size))
 
     # Grip the piece
+    sequence_list.append(apply_inverse_kinematics(from_x, half_piece_height, from_z, 0))
 
     # Give instruction to GUI to pickup piece
     sequence_list.append(["GUI", "TAKE", from_pos])
     # Hover above the first field on SAFE height (Keep the gripper closed!!):
+    sequence_list.append(apply_inverse_kinematics(from_x, safe_height, from_z, 0))
 
     # Move to new position on SAFE height
+    sequence_list.append(apply_inverse_kinematics(to_x, safe_height, to_z, 0))
 
-    # Hover above the first field on LOW height:
+    # Hover above the second field on LOW height:
+    sequence_list.append(apply_inverse_kinematics(to_x, low_height, to_z, 0))
 
-    # Hover above the first field on half of the piece height:
+    # Hover above the second field on half of the piece height:
+    sequence_list.append(apply_inverse_kinematics(to_x, half_piece_height, to_z, chessboard.field_size))
 
     # Give instruction to GUI to drop piece
     sequence_list.append(["GUI", "DROP", to_pos])
+
     # Move to new position on SAFE height (And open the gripper)
+    sequence_list.append(apply_inverse_kinematics(to_x, safe_height, to_z, chessboard.field_size))
 
     return sequence_list
 
@@ -162,29 +178,37 @@ def move_to_garbage(chessboard, from_pos):
     (from_x, from_y, from_z) = board_position_to_cartesian(chessboard, from_pos)
     (to_x, to_y, to_z) = board_position_to_cartesian(chessboard, drop_location)
 
-
     # Hover above the first field on SAFE height:
-    sequence_list.append(apply_inverse_kinematics(from_x, REPLACE_THIS_WITH_YOUR_OWN_CODE, from_z, chessboard.field_size))
+    sequence_list.append(apply_inverse_kinematics(from_x, safe_height, from_z, chessboard.field_size))
+
     # Hover above the first field on LOW height:
+    sequence_list.append(apply_inverse_kinematics(from_x, low_height, from_z, chessboard.field_size))
 
     # Hover above the first field on half of the piece height:
-
-    # Hover above the first field on half of the piece height:
+    sequence_list.append(apply_inverse_kinematics(from_x, half_piece_height, from_z, chessboard.field_size))
 
     # Grip the piece
+    sequence_list.append(apply_inverse_kinematics(from_x, half_piece_height, from_z, 0))
 
     # Give instruction to GUI to pickup piece
     sequence_list.append(["GUI", "TAKE", from_pos])
+    
     # Hover above the first field on SAFE height (Keep the gripper closed!!):
+    sequence_list.append(apply_inverse_kinematics(from_x, safe_height, from_z, 0))
 
     # Move to new position on SAFE height
+    sequence_list.append(apply_inverse_kinematics(to_x, safe_height, to_z, 0))
 
-    # Hover above the first field on LOW height:
+    # Hover above the second field on LOW height:
+    sequence_list.append(apply_inverse_kinematics(to_x, low_height, to_z, 0))
 
-    # Hover above the first field on half of the piece height:
+    # Hover above the second field on half of the piece height:
+    sequence_list.append(apply_inverse_kinematics(to_x, half_piece_height, to_z, chessboard.field_size))
 
     # Give instruction to GUI to drop piece
     sequence_list.append(["GUI", "DROP", drop_location])
+
     # Move to new position on SAFE height (And open the gripper)
+    sequence_list.append(apply_inverse_kinematics(to_x, safe_height, to_z, chessboard.field_size))
 
     return sequence_list
