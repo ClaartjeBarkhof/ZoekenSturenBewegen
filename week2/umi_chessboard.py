@@ -53,7 +53,7 @@ class UMI_chessboard:
         self.add_pieces()
 
         # Set the angle and position of the board, where the rotational axis is H8
-        self.set_pos_angle(position_x_z, 0.0)
+        self.set_pos_angle(position_x_z, angle_degrees)
 
 
     def remove_piece(self, position):
