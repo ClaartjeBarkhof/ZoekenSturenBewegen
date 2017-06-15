@@ -7,6 +7,17 @@ from visual.controls import *
 
 from umi_common import *
 
+################################
+# ZSB - Opdracht 2             #
+# umi_student_functions.py     #
+# 16/06/2017                   #
+#                              #
+# Anna Stalknecht - 10792872   #
+# Claartje Barkhof - 11035129  #
+# Group C                      #
+#                              #
+################################
+
 class UMI_chessboard:
     def __init__(self, frameworld, board_size=0.3, position_x_z = (0.15, -0.15), angle_degrees=-0.0):
         # Dimensions of the board

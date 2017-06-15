@@ -2,6 +2,17 @@
 
 from __future__ import division, print_function
 
+################################
+# ZSB - Opdracht 2             #
+# umi_student_functions.py     #
+# 16/06/2017                   #
+#                              #
+# Anna Stalknecht - 10792872   #
+# Claartje Barkhof - 11035129  #
+# Group C                      #
+#                              #
+################################
+
 class UMI_parameters:
     def __init__(self):
         # Specifications of UMI

@@ -2,6 +2,17 @@
 from __future__ import division, print_function
 import csv
 
+################################
+# ZSB - Opdracht 2             #
+# umi_student_functions.py     #
+# 16/06/2017                   #
+#                              #
+# Anna Stalknecht - 10792872   #
+# Claartje Barkhof - 11035129  #
+# Group C                      #
+#                              #
+################################
+
 def to_coordinate(notation):
     """ Given a notation in the form [a1-h8], return the corresponding notation
         (0-7, 0-7)

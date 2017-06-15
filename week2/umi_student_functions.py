@@ -11,47 +11,53 @@ from visual import *
 # <<<<<<<<<<-------------------------------------------------------------------- TODO FOR STUDENTS
 UMI = UMI_parameters()
 
+################################
+# ZSB - Opdracht 2             #
+# umi_student_functions.py     #
+# 16/06/2017                   #
+#                              #
+# Anna Stalknecht - 10792872   #
+# Claartje Barkhof - 11035129  #
+# Group C                      #
+#                              #
+################################
+
 def apply_inverse_kinematics(x, y, z, gripper):
-    ''' Computes the angles, given some real world coordinates
+    ''' Computes the angles of the joints, given some real world coordinates
+        making use of inverse kinematics based on the Robotics readers made by
+        Leo Dorst.
         :param float x: cartesian x-coordinate
         :param float y: cartesian y-coordinate
         :param float z: cartesian z-coordinate
 
         :return: Returns the a tuple containing the position and angles of the robot-arm joints.
     '''
-    # Implementation is based on the Robotics readers made by Leo.
-    # TIP: If you want to know at all times, what the current x,y,z of your robot-arm is,
-    # Read the other TIP at the bottom of the umi_simulation file.
-    
-    # Real arm runs from of 0 to 1.082
-    riser_position = y + UMI.total_arm_height # (we want the gripper to be at the y position, but we can only influence the riser.)
+
+    # Riser_position
+    riser_position = y + UMI.total_arm_height
 
     # Variables:
-    x_ik = x
-    x_ik_2 = (x**2) #square
-    y_ik = z
-    y_ik_2 = (z**2) #square
-    l_1 = UMI.upper_length
+    x_ik = x                        # x in inverse kinematics (x_ik)
+    x_ik_2 = (x**2)                 # square of x_ik
+    y_ik = z                        # z in inverse kinematics
+    y_ik_2 = (z**2)                 # square of z_ik
+    l_1 = UMI.upper_length          
     l_2 = UMI.lower_length
     l_1_2 = (UMI.upper_length**2)
     l_2_2 = (UMI.lower_length**2)
-    #length_x_y = math.sqrt(x_ik_2 + y_ik_2)
-    print("HELLO")
-    print((x_ik_2 + y_ik_2 - l_1_2 - l_2_2)/(2*l_1*l_2))
-    print(x_ik_2 + y_ik_2 - l_1_2 - l_2_2)
-    print(2*l_1*l_2)
+
     # IK formulas
     elbow_angle = math.acos((x_ik_2 + y_ik_2 - l_1_2 - l_2_2)/(2*l_1*l_2))
-
     s_2 = (math.sqrt(1-(math.cos(elbow_angle)**2)))
     shoulder_angle = math.atan2(y_ik,x_ik) - atan2((l_2*s_2),(l_1+(l_2*math.cos(elbow_angle))))
 
-    # Compute the resulting angles for each joint in DEGREES (you can use the degrees() function to convert radians).
+    # Resulting angles in degrees
     elbow_angle = degrees(elbow_angle)
     shoulder_angle = degrees(shoulder_angle)
-    # We want the piece to be placed down in the same angle as we picked it up
+
+    # Resulting wrist angle (counter-turning the two other joints)
     wrist_angle = (-elbow_angle-shoulder_angle)
-    # Gripper is not influenced by the kinematics, so one less variable for you to alter *yay*
+
     return (riser_position, shoulder_angle, elbow_angle, wrist_angle, gripper)
 
 def board_position_to_cartesian(chessboard, position):

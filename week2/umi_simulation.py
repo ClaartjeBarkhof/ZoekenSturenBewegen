@@ -13,6 +13,17 @@ from umi_student_functions import *
 import numpy as np
 import os.path
 
+################################
+# ZSB - Opdracht 2             #
+# umi_student_functions.py     #
+# 16/06/2017                   #
+#                              #
+# Anna Stalknecht - 10792872   #
+# Claartje Barkhof - 11035129  #
+# Group C                      #
+#                              #
+################################
+
 #**********************************************
 # ROBOT PARAMETERS
 
