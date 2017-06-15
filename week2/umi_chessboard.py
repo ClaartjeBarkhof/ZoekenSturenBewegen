@@ -8,7 +8,7 @@ from visual.controls import *
 from umi_common import *
 
 class UMI_chessboard:
-    def __init__(self, frameworld, board_size=0.3, position_x_z = (0.15, -0.15), angle_degrees=0):
+    def __init__(self, frameworld, board_size=0.3, position_x_z = (0.15, -0.15), angle_degrees=-0.0):
         # Dimensions of the board
         self.chessboard_size = board_size
         self.field_size = (self.chessboard_size / 8.0)
@@ -42,7 +42,7 @@ class UMI_chessboard:
         self.add_pieces()
 
         # Set the angle and position of the board, where the rotational axis is H8
-        self.set_pos_angle(position_x_z, 0)
+        self.set_pos_angle(position_x_z, 0.0)
 
 
     def remove_piece(self, position):

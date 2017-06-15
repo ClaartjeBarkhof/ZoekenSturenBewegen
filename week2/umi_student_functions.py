@@ -26,11 +26,31 @@ def apply_inverse_kinematics(x, y, z, gripper):
     # Real arm runs from of 0 to 1.082
     riser_position = y + UMI.total_arm_height # (we want the gripper to be at the y position, but we can only influence the riser.)
 
+    # Variables:
+    x_ik = x
+    x_ik_2 = (x**2) #square
+    y_ik = z
+    y_ik_2 = (z**2) #square
+    l_1 = UMI.upper_length
+    l_2 = UMI.lower_length
+    l_1_2 = (UMI.upper_length**2)
+    l_2_2 = (UMI.lower_length**2)
+    #length_x_y = math.sqrt(x_ik_2 + y_ik_2)
+    print("HELLO")
+    print((x_ik_2 + y_ik_2 - l_1_2 - l_2_2)/(2*l_1*l_2))
+    print(x_ik_2 + y_ik_2 - l_1_2 - l_2_2)
+    print(2*l_1*l_2)
+    # IK formulas
+    elbow_angle = math.acos((x_ik_2 + y_ik_2 - l_1_2 - l_2_2)/(2*l_1*l_2))
+
+    s_2 = (math.sqrt(1-(math.cos(elbow_angle)**2)))
+    shoulder_angle = math.atan2(y_ik,x_ik) - atan2((l_2*s_2),(l_1+(l_2*math.cos(elbow_angle))))
+
     # Compute the resulting angles for each joint in DEGREES (you can use the degrees() function to convert radians).
-    elbow_angle = 0 # ????
-    shoulder_angle = 0 # ????
+    elbow_angle = degrees(elbow_angle)
+    shoulder_angle = degrees(shoulder_angle)
     # We want the piece to be placed down in the same angle as we picked it up
-    wrist_angle = 0 # ????
+    wrist_angle = (-elbow_angle-shoulder_angle)
     # Gripper is not influenced by the kinematics, so one less variable for you to alter *yay*
     return (riser_position, shoulder_angle, elbow_angle, wrist_angle, gripper)
 
@@ -44,6 +64,20 @@ def board_position_to_cartesian(chessboard, position):
         :param str position: A position in the range [a1-h8]
 
         :return: tuple Return a position in the format (x,y,z)
+
+        def rotate(origin, point, angle):
+    """
+    Rotate a point counterclockwise by a given angle around a given origin.
+
+    The angle should be given in radians.
+    """
+    ox, oy = origin
+    px, py = point
+
+    qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
+    qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
+    return qx, qy
+
     '''
     if(position == 'j5'):
         row = -2
@@ -53,6 +87,9 @@ def board_position_to_cartesian(chessboard, position):
         letter = position[0]
         number = int(position[1])
         print("notation:", letter, number)
+        angle = -(chessboard.get_angle_radians())
+
+        print("ANGLE:",angle)
 
         # Get the local coordinates for the tiles on the board in the 0-7 range.
         #(row, column) = to_coordinate(position)
@@ -60,33 +97,30 @@ def board_position_to_cartesian(chessboard, position):
         letter_list = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
         number_list = [8,7,6,5,4,3,2,1]
         field_size = chessboard.field_size #meters
-        (x_h8, y_h8, z_h8) = chessboard.get_position()
+        (ox, oy, oz) = chessboard.get_position() # origin of rotation
 
         column = letter_list.index(letter)
         row = number_list.index(number)
+        print("RC=",row,column)
+        dz = (column+0.5) * field_size
+        dx = (row+0.5) * field_size
 
-    print("row/column=", row, column)
+        # rotating point 
+        pz = oz + dz
+        print("pz =",pz)
+        px = ox + dx
+        print("px =",px)
 
-    board_angle_radians = chessboard.get_angle_radians()
-    print("angle is", angle)
+        rp_z = oz + math.cos(angle) * (pz - oz) - math.sin(angle) * (px - ox)
+        print("rp_z =", rp_z)
+        rp_x = ox + math.sin(angle) * (pz - oz) + math.cos(angle) * (px - ox)
+        print("rp_x =", rp_x)
 
     world_coordinate_y = chessboard.get_board_height()
 
-    # letter-direction (h to a)
-    x1 = sin(board_angle_radians+half_pi) * (row+0.5) * field_size
-    print("x1=", x1)
-    z1 = cos(board_angle_radians+half_pi) * (row+0.5) * field_size
-    print("z1=", z1)
-
-    # number-direction (8 to 1)
-    x2 = sin(board_angle_radians) * (column+0.5) * field_size
-    print("x2=",x2)
-    z2 = cos(board_angle_radians) * (column+0.5) * field_size
-    print("z2=",z2)
-
     # Rotation + translation together form the following coordinates in the world:
-    world_coordinate_x = x1+x2+x_h8
-    world_coordinate_z = z1+z2+z_h8
+    world_coordinate_x = rp_x
+    world_coordinate_z = rp_z
 
     # Output the results.
     result = (world_coordinate_x, world_coordinate_y, world_coordinate_z)
@@ -118,9 +152,8 @@ def high_path(chessboard, from_pos, to_pos):
     # (*cough* this data might be stored in a chessboard *cough*)
     # You might need if statements around this, but you have to fill this variable regardlessly.
     [nonsense, material, colour] = chessboard.pieces[from_pos]
-    half_piece_height = chessboard.pieces_height[material]/2
+    half_piece_height = (chessboard.pieces_height[material]/2)+chessboard.get_board_height()
 
-    REPLACE_THIS_WITH_YOUR_OWN_CODE = "wrong"
     # Hover above the first field on SAFE height:
     sequence_list.append(apply_inverse_kinematics(from_x, safe_height, from_z, chessboard.field_size))
 
@@ -170,9 +203,8 @@ def move_to_garbage(chessboard, from_pos):
     drop_location = "j5"
     # Define half_piece height (you want to grab the middle of a piece, so get the height of the piece on a position.)
     # (*cough* this data might be stored in a chessboard *cough*)
-    REPLACE_THIS_WITH_YOUR_OWN_CODE = "wrong"
     # You might need if statements around this, but you have to fill this variable regardlessly.
-    half_piece_height = 0 # ????
+    half_piece_height = (chessboard.pieces_height[material]/2)+chessboard.get_board_height()
 
     # Get the coordinates.
     (from_x, from_y, from_z) = board_position_to_cartesian(chessboard, from_pos)
